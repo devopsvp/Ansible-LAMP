@@ -1,0 +1,6 @@
+---
+- hosts: all
+  roles:
+    - ../roles/apache
+    - ../roles/database
+    - ../roles/php

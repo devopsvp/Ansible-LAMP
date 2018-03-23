@@ -1,0 +1,17 @@
+---
+- name: Install PHP packages
+  apt: name={{ item }} state=present
+  with_items:
+    - [ php, libapache2-mod-php, php-mcrypt, php-mysql ]
+
+- name: copy dir.conf with new details
+  copy: src=dir.conf dest=/etc/apache2/mods-enabled/dir.conf
+  notify: restart apache2 service
+
+- name: check php info pacge using curl
+  command: curl -I localhost/info.php
+  register: curl_output
+
+- name: check the site status on Debian machine
+  debug: msg="Success on Debian machines"
+  when: curl_output.stdout.find("200 OK") != -1
